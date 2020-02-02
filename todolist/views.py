@@ -3,8 +3,8 @@ from django.shortcuts import render, redirect
 lst = [
 	{'待办事项': '遛狗', '完成情况': False},
 	{'待办事项': '拖地', '完成情况': False},
-	{'待办事项': '拖地', '完成情况': True},
-	{'待办事项': '拖地', '完成情况': False},
+	{'待办事项': '洗碗', '完成情况': True},
+	{'待办事项': '跳绳', '完成情况': False},
 ]
 
 # Create your views here.
