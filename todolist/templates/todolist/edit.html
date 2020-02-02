@@ -6,12 +6,21 @@
 {% block 标题 %}编辑待办事项{% endblock 标题 %}
 {% block 主体 %}
 <br>  
-<form id="form-edit">
+<form id="form-edit" method="POST" action="">
   <div class="form-group">
     <label for="editTodo"></label>
-    <input class="form-control form-control-lg" id="editTodo" type="text" value="遛狗">
+          {% csrf_token %}
+    <input name="编辑后的待办事项" class="form-control form-control-lg" id="editTodo" type="text" value="{{ 待修改事项 }}">
     <small id="help" class="form-text text-muted">在这里编辑待办事项</small>
   </div>
-  <button type="button" class="btn btn-primary btn-lg btn-block">提交</button>
+
+	{% if 警告 %}
+	<div class="alert alert-warning alert-dismissible" role="alert">
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	  <strong><center>{{警告}}</center></strong>
+	</div>
+	{% endif %}
+
+  <button type="submit" class="btn btn-primary btn-lg btn-block">提交</button>
 </form>
 {% endblock 主体 %}
