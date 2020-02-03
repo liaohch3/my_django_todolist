@@ -10,7 +10,7 @@
   <div class="form-group">
     <label for="editTodo"></label>
           {% csrf_token %}
-    <input name="编辑后的待办事项" class="form-control form-control-lg" id="editTodo" type="text" value="{{ 待修改事项 }}">
+    <input name="editedTodo" class="form-control form-control-lg" id="editTodo" type="text" value="{{ forEditTodo }}">
     <small id="help" class="form-text text-muted">在这里编辑待办事项</small>
   </div>
 

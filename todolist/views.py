@@ -1,61 +1,57 @@
 from django.shortcuts import render, redirect
+from .models import Todo
 
-lst = [
-	{'待办事项': '遛狗', '完成情况': False},
-	{'待办事项': '拖地', '完成情况': False},
-	{'待办事项': '拖地', '完成情况': True},
-	{'待办事项': '拖地', '完成情况': False},
-]
 
 # Create your views here.
 def home(request):
-	global lst
 
 	if request.method == "POST":
-		if request.POST.get('添加的待办事项') == '':
-			content = {'警告': '待办事项不能为空！', '清单': lst}
+		if request.POST.get('addTodo') == '':
+			content = {'警告': '待办事项不能为空！', 'listTodo': Todo.objects.all()}
 			return render(request, 'todolist/home.html', content)
 		else:
-			lst.append({'待办事项': request.POST.get('添加的待办事项'), '完成情况': False})
-			content = {'清单': lst}
+			a_row = Todo(name=request.POST.get('addTodo'))
+			a_row.save()
+			content = {'listTodo': Todo.objects.all()}
 			return render(request, 'todolist/home.html', content)
 	else:
-		content = {'清单': lst}
+		content = {'listTodo': Todo.objects.all()}
 		return render(request, 'todolist/home.html', content)
 
-def delete(request, forloop_counter):
-	global lst
-
-	lst.pop(int(forloop_counter) - 1)
+def delete(request, item_id):
+	a_row = Todo.objects.get(id=item_id)
+	a_row.delete()
 	return redirect('todolist:主页')
 
-def finish(request, forloop_counter):
-	global lst
+def finish(request, item_id):
 
-	lst[int(forloop_counter) - 1]['完成情况'] = True
+	a_row = Todo.objects.get(id=item_id)
+	a_row.done = True
+	a_row.save()
 	return redirect('todolist:主页')
 
-def unfinish(request, forloop_counter):
-	global lst
+def unfinish(request, item_id):
 
-	lst[int(forloop_counter) - 1]['完成情况'] = False
+	a_row = Todo.objects.get(id=item_id)
+	a_row.done = False
+	a_row.save()
 	return redirect('todolist:主页')
 
 def about(request):
 	return render(request, 'todolist/about.html')
 
-def edit(request, forloop_counter):
-	global lst
+def edit(request, item_id):
 
 	if request.method == "POST":
-		if request.POST.get('编辑后的待办事项') == '':
+		if request.POST.get('editedTodo') == '':
 			content = {'警告': '待办事项不能为空！'}
 			return render(request, 'todolist/edit.html', content)
 		else:
-			# lst.append({'待办事项': request.POST.get('编辑后的待办事项'), '完成情况': False})
-			lst[int(forloop_counter)-1]['待办事项'] = request.POST.get('编辑后的待办事项')
-			content = {'清单': lst}
+			a_row = Todo.objects.get(id=item_id)
+			a_row.name = request.POST.get('editedTodo')
+			a_row.save()
+			content = {'listTodo': Todo.objects.all()}
 			return redirect('todolist:主页')
 	else:
-		content = {'待修改事项': lst[int(forloop_counter)-1]['待办事项']}
+		content = {'forEditTodo': Todo.objects.get(id=item_id).name}
 		return render(request, 'todolist/edit.html', content)
